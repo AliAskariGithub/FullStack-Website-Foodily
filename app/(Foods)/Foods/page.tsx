@@ -10,6 +10,7 @@ import { IoCartSharp } from "react-icons/io5";
 import { useUser } from "@clerk/nextjs";
 import { fetchFoods } from "@/sanity/lib/fetchquires/food";
 import AddToBasketButton from "@/components/AddToBasketButton";
+import useBasketStore from "@/store/store";
 
 const caveat = Caveat({ weight: "600", subsets: ["latin"] });
 const satisfy = Satisfy({ weight: "400", subsets: ["latin"] });
@@ -22,6 +23,9 @@ const FoodPage: React.FC = () => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [filteredMenu, setFilteredMenu] = useState<Food[]>([]);
   const { user } = useUser();
+  const itemCount = useBasketStore((state) =>
+    state.items.reduce((total, item) => total + item.quantity, 0)
+  );
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value.toLowerCase();
@@ -72,18 +76,18 @@ const FoodPage: React.FC = () => {
           />
         </div>
         <Link
-          href={user ? "/cart" : "/sign-in"}
-          className="w-max cursor-pointer  text-[#8f613c] hover:text-[#744732] hover:scale-125 duration-200 transition-all"
-        >
-          <div className="w-4 h-4 flex justify-center items-center bg-[#e9b966] rounded-full fixed ml-4 -mt-0.5 border border-[#744732]">
-            <span
-              className={`text-xs text-[#744732] fixed ${chakra_petch.className}`}
-            >
-              0
-            </span>
-          </div>
-          <IoCartSharp size={28} />
-        </Link>
+            href={user ? "/cart" : "/sign-in"}
+            className="w-max cursor-pointer  text-[#8f613c] hover:text-[#744732] hover:scale-125 duration-200 transition-all"
+          >
+            <div className="w-4 h-4 flex justify-center items-center bg-[#e9b966] rounded-full fixed ml-4 -mt-0.5 border border-[#744732]">
+              <span
+                className={`text-xs text-[#744732] fixed ${chakra_petch.className}`}
+              >
+                {itemCount}
+              </span>
+            </div>
+            <IoCartSharp size={28} />
+          </Link>
       </div>
 
       <div className="flex flex-col items-center w-full mt-20">

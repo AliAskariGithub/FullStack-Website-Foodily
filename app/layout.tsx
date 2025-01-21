@@ -8,7 +8,8 @@ import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Foodily",
-  description: "This is a food website. Here you can order food and The interesting part is it is Home Made Food. So order the Food and Enjoy alot.",
+  description:
+    "This is a food website. Here you can order food and The interesting part is it is Home Made Food. So order the Food and Enjoy alot.",
 };
 
 export default function RootLayout({
@@ -18,17 +19,18 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-    <html lang="en">
-      <body>
-      <div>
-        <Sidebar />
-      </div>
-        {children}
-        <Footer />
-        <Toaster />
-        <SanityLive />
-      </body>
-    </html>
+      <html lang="en">
+        <body>
+          <Sidebar />
+
+          <div>{children}</div>
+
+          <Footer />
+
+          <Toaster />
+          <SanityLive />
+        </body>
+      </html>
     </ClerkProvider>
   );
 }

@@ -14,6 +14,7 @@ import { useUser } from "@clerk/nextjs";
 import MainSection from "./MainSection";
 import Chiefs from "./Chiefs";
 import { SpecialMenu } from "@/types";
+import useBasketStore from "@/store/store";
 
 const caveat = Caveat({ weight: "600", subsets: ["latin"] });
 const satisfy = Satisfy({ weight: "400", subsets: ["latin"] });
@@ -26,6 +27,9 @@ const Food = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const itemCount = useBasketStore((state) =>
+    state.items.reduce((total, item) => total + item.quantity, 0)
+  );
   const { user } = useUser();
 
   const addHandleMultipleFunction = () => {
@@ -149,7 +153,7 @@ const Food = () => {
               <span
                 className={`text-xs text-[#744732] fixed ${chakra_petch.className}`}
               >
-                0
+                {itemCount}
               </span>
             </div>
             <IoCartSharp size={28} />
