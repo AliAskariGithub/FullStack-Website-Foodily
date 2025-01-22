@@ -47,11 +47,12 @@ export const Category = defineType({
           { title: 'Breakfast', value: 'breakfast' },
           { title: 'Lunch', value: 'lunch' },
           { title: 'Dinner', value: 'dinner' },
-          { title: 'Snack', value: 'snack' },
-          { title: 'Dessert', value: 'dessert' },
-          { title: 'Beverage', value: 'beverage' },
+          { title: 'Snacks', value: 'snacks' },
+          { title: 'Desserts', value: 'desserts' },
+          { title: 'Drinks', value: 'drinks' },
+          { title: 'Other', value: 'other' },
         ],
-      },
+      }
     }),
     defineField({
       name: 'available',

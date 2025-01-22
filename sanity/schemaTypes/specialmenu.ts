@@ -44,7 +44,6 @@ export const SpecialMenu = defineType({
     }),
     defineField({
       name: 'ratings',
-      title: 'Ratings',
       type: 'string',
       options: {
         list: [
@@ -58,14 +57,12 @@ export const SpecialMenu = defineType({
     }),
     defineField({
       name: 'chief',
-      title: 'Chief',
       type: 'reference',
       to: [{ type: 'chiefs' }], 
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'inStock',
-      title: 'In Stock',
       type: 'boolean',
       description: 'Toggle to mark whether the food is in stock or not.',
     }),

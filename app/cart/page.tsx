@@ -223,8 +223,8 @@ const BasketPage = () => {
                 {showPopover && (
                   <>
                     {showUserForm && (
-                      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                        <div className="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full">
+                      <div className="fixed inset-0 flex items-center justify-center z-[1000] bg-black bg-opacity-50">
+                        <div className="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full relative z-[10000]">
                           <h2 className="text-2xl font-bold mb-4 text-gray-800">
                             Add Shipping Address
                           </h2>

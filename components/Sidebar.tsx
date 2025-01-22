@@ -7,15 +7,21 @@ import { UserButton } from "@clerk/nextjs";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import { FaPowerOff } from "react-icons/fa";
 import { FiSidebar } from "react-icons/fi";
-import { Caveat } from "next/font/google";
+import { Caveat, Chakra_Petch } from "next/font/google";
 import { RiFilePaper2Line } from "react-icons/ri";
 import { MdOutlineHistory } from "react-icons/md";
+import { IoCartSharp } from "react-icons/io5";
+import useBasketStore from "@/store/store";
 
 const caveat = Caveat({ weight: "600", subsets: ["latin"] });
+const chakra_petch = Chakra_Petch({ weight: "700", subsets: ["latin"] });
 
 const Sidebar = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const { userId } = useAuth();
+  const itemCount = useBasketStore((state) =>
+    state.items.reduce((total, item) => total + item.quantity, 0)
+  );
   const { user } = useUser();
 
   const toggleSidebar = () => {
@@ -24,6 +30,7 @@ const Sidebar = () => {
 
   return (
     <div>
+      <div>
       <FiSidebar
         onClick={toggleSidebar}
         size={20}
@@ -31,6 +38,20 @@ const Sidebar = () => {
           isExpanded ? "left-[182px] " : "md:left-[70px] left-6"
         }`}
       />
+      <Link
+          href={user ? "/cart" : "/sign-in"}
+          className="w-max cursor-pointer fixed z-[100] right-8 top-5  text-[#8f613c] hover:text-[#744732] hover:scale-125 duration-200 transition-all"
+        >
+          <div className="w-4 h-4 flex justify-center items-center bg-[#e9b966] rounded-full fixed ml-4 -mt-0.5 border border-[#744732]">
+            <span
+              className={`text-xs text-[#744732] fixed ${chakra_petch.className}`}
+            >
+              {itemCount}
+            </span>
+          </div>
+          <IoCartSharp size={28} />
+        </Link>
+      </div>
 
       <div
         className={`flex flex-col h-full  z-50 bg-[#e9b966] md:px-4 md:pr-10 fixed top-0 left-0 overflow-hidden duration-200 transition-all ${

@@ -6,6 +6,7 @@ export const fetchFoods = async () => {
     name,
     slug,
     price,
+    fakePrice,
     image {
       asset -> {
         _id,

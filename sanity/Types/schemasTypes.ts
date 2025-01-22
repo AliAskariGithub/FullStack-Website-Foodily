@@ -47,6 +47,7 @@ export interface Food  {
   name: string;
   slug: string;
   price: number;
+  fakePrice: number,
   image: {
     asset: {
       url: string ;

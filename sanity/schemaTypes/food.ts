@@ -30,6 +30,12 @@ export const Food = defineType({
       validation: (Rule) => Rule.min(0).warning('Price should be a positive number.'),
     }),
     defineField({
+      name: 'fakePrice',
+      title: 'Fake Price',
+      type: 'number',
+      validation: (Rule) => Rule.min(0).warning('Price should be a positive number.'),
+    }),
+    defineField({
       name: 'image',
       title: 'Food Image',
       type: 'image',
@@ -41,7 +47,7 @@ export const Food = defineType({
       name: 'description',
       title: 'Description',
       type: 'text',
-      validation: (Rule) => Rule.max(500).warning('Description should not exceed 500 characters.'),
+      validation: (Rule) => Rule.min(200).max(500).warning('Description should not exceed 500 characters or be less than 200 characters.'),
     }),
     defineField({
       name: 'category',
