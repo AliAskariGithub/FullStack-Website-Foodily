@@ -13,15 +13,21 @@ const satisfy = Satisfy({ weight: "400", subsets: ["latin"] });
 const chakra_petch = Chakra_Petch({ weight: "700", subsets: ["latin"] });
 
 interface FoodPageProps {
-  params: {
-    slug: string;
-  };
+  params: { slug: string };
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function FoodPage({ params }: FoodPageProps): Promise<any> {
+async function FoodPage({ params }: FoodPageProps) {
   const { slug } = params;
+
   const foods = await getFoodBySlug(slug);
+
+  if (!foods) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="text-3xl font-bold">Food not found</h1>
+      </div>
+    );
+  }
 
   const isOutOfStock = foods.stockQuantity != null && foods.stockQuantity <= 0;
 
@@ -86,7 +92,7 @@ async function FoodPage({ params }: FoodPageProps): Promise<any> {
             >
               {foods.description}
             </p>
-            
+
             <div className="flex items-end justify-between mt-5">
               <span
                 className={`flex items-center font-extrabold text-2xl ${satisfy.className}`}
