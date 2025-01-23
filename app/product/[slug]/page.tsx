@@ -18,7 +18,8 @@ interface FoodPageProps {
   };
 }
 
-async function FoodPage({ params }: FoodPageProps) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function FoodPage({ params }: FoodPageProps): Promise<any> {
   const { slug } = params;
   const foods = await getFoodBySlug(slug);
 
