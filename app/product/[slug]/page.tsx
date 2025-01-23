@@ -12,7 +12,13 @@ interface Review {
 const satisfy = Satisfy({ weight: "400", subsets: ["latin"] });
 const chakra_petch = Chakra_Petch({ weight: "700", subsets: ["latin"] });
 
-async function FoodPage({ params }: { params: { slug: string } }) {
+interface FoodPageProps {
+  params: {
+    slug: string;
+  };
+}
+
+async function FoodPage({ params }: FoodPageProps) {
   const { slug } = params;
   const foods = await getFoodBySlug(slug);
 
@@ -22,7 +28,7 @@ async function FoodPage({ params }: { params: { slug: string } }) {
     <div className="container mx-auto px-4 py-8 pl-10 md:pl-20 mt-20">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div
-          className={`relative h-full md:h-56 w-full overflow-hidden ${
+          className={`relative h-full w-full overflow-hidden ${
             isOutOfStock ? "opacity-50" : "opacity-100"
           }`}
         >
@@ -59,16 +65,15 @@ async function FoodPage({ params }: { params: { slug: string } }) {
             </div>
           )}
 
-
-{foods.discount > 0 && (
-              <div>
-                <div className="absolute top-2 -left-1 rounded-r-full  bg-red-600 z-10 w-max px-3 py-1 text-xs">
-                  <span className="font-medium text-xs text-white pr-1">
-                    {foods.discount}% off
-                  </span>
-                </div>
+          {foods.discount > 0 && (
+            <div>
+              <div className="absolute top-2 -left-1 rounded-r-full bg-red-600 z-10 w-max px-3 py-1 text-xs">
+                <span className="font-medium text-xs text-white pr-1">
+                  {foods.discount}% off
+                </span>
               </div>
-            )}
+            </div>
+          )}
 
           <div className="p-4 mt-8">
             <h2 className={`text-4xl font-extrabold ${satisfy.className}`}>
@@ -80,7 +85,7 @@ async function FoodPage({ params }: { params: { slug: string } }) {
             >
               {foods.description}
             </p>
-
+            
             <div className="flex items-end justify-between mt-5">
               <span
                 className={`flex items-center font-extrabold text-2xl ${satisfy.className}`}
@@ -94,35 +99,35 @@ async function FoodPage({ params }: { params: { slug: string } }) {
               </span>
 
               <div className="flex flex-col gap-1 items-end">
-              <div >
-              <span
-                className={`font-medium text-lg ${
-                  isOutOfStock
-                    ? "text-red-800"
-                    : "text-green-600 px-3 py-1 rounded-full shadow"
-                } ${chakra_petch.className}`}
-              >
-                {isOutOfStock ? "Out of Stock" : "In Stock"}
-              </span>
-            </div>
+                <div>
+                  <span
+                    className={`font-medium text-lg ${
+                      isOutOfStock
+                        ? "text-red-800"
+                        : "text-green-600 px-3 py-1 rounded-full shadow"
+                    } ${chakra_petch.className}`}
+                  >
+                    {isOutOfStock ? "Out of Stock" : "In Stock"}
+                  </span>
+                </div>
 
-            <div>
-                {foods.rating &&
-                  Array.isArray(foods.rating) &&
-                  foods.rating.map((review: Review, index: number) => (
-                    <span
-                      key={index}
-                      className={`text-2xl font-bold ${chakra_petch.className}`}
-                    >
-                      {review.rating}
-                    </span>
-                  ))}
-                <span
-                  className={`opacity-70 text-md ${chakra_petch.className}`}
-                >
-                  /5{" "}
-                </span>
-                ⭐
+                <div>
+                  {foods.rating &&
+                    Array.isArray(foods.rating) &&
+                    foods.rating.map((review: Review, index: number) => (
+                      <span
+                        key={index}
+                        className={`text-2xl font-bold ${chakra_petch.className}`}
+                      >
+                        {review.rating}
+                      </span>
+                    ))}
+                  <span
+                    className={`opacity-70 text-md ${chakra_petch.className}`}
+                  >
+                    /5{" "}
+                  </span>
+                  ⭐
                 </div>
               </div>
             </div>

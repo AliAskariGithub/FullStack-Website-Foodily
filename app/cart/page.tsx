@@ -8,6 +8,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { TiShoppingCart } from "react-icons/ti";
+import { COUPON_CODE } from "@/sanity/lib/couponCode";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -17,8 +18,9 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import Link from "next/link";
-import { Chakra_Petch } from "next/font/google";
+import { Chakra_Petch, Satisfy } from "next/font/google";
 
+const satisfy = Satisfy({ weight: "400", subsets: ["latin"] });
 const chakra_petch = Chakra_Petch({ weight: "700", subsets: ["latin"] });
 
 const BasketPage = () => {
@@ -48,13 +50,14 @@ const BasketPage = () => {
     userDetails.region;
 
   const [couponCode, setCouponCode] = useState("");
+  const [discount, setDiscount] = useState(0);
 
   const deliveryFee = 150;
-  const taxPercentage = 0.05;
+  const taxPercentage = 0.0384762;
 
   const totalPrice = useBasketStore.getState().getTotalPrice();
   const taxAmount = totalPrice * taxPercentage;
-  const grandTotal = totalPrice + taxAmount + deliveryFee;
+  const grandTotal = totalPrice + taxAmount + deliveryFee - discount;
 
   const clearBasket = useBasketStore.getState().clearBasket;
 
@@ -73,6 +76,28 @@ const BasketPage = () => {
       alert("An error occurred. Please try again.");
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleCouponSubmit = () => {
+    let validCoupon = false;
+    Object.keys(COUPON_CODE).forEach((key) => {
+      if (
+        (
+          COUPON_CODE[
+            key as keyof typeof COUPON_CODE
+          ] as unknown as string[]
+        ).includes(couponCode)
+      ) {
+        validCoupon = true;
+      }
+    });
+
+    if (validCoupon) {
+      const discountAmount = totalPrice * 0.05;
+      setDiscount(discountAmount);
+    } else {
+      setDiscount(0);
     }
   };
 
@@ -131,84 +156,81 @@ const BasketPage = () => {
             {groupedItems?.map((item) => (
               <div
                 key={item.food?._id}
-                className="mb-4 p-4 border mt-6 rounded flex items-center justify-between"
+                className="mb-4 p-4 bg-gradient-to-r from-[#e9b966] via-[#e1d3b6] to-[#e9b966] border border-[#8f613c] shadow-lg mt-6 rounded flex items-center justify-between"
               >
                 <div
                   className="flex flex-1 items-center max-w-0 cursor-pointer"
                   onClick={() => router.push(`/foods/${item.food?._id}`)}
                 >
-                  <div className="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 mr-4">
+                  <div className="w-20 h-20 sm:w-28 sm:h-24 flex-shrink-0 mr-4">
                     {item.food?.image && item.food.image.asset?.url && (
                       <Image
                         src={item.food.image.asset.url}
                         alt={item.food.name ?? "food Image"}
                         className="w-full h-full object-cover rounded"
-                        width={96}
-                        height={96}
+                        width={1000}
+                        height={1000}
                       />
                     )}
                   </div>
                   <div className="min-w-max">
-                    <h2 className="text-lg sm:text-xl font-semibold truncate">
+                    <h2 className={`text-lg sm:text-xl font-semibold truncate ${satisfy.className}`}>
                       {item.food?.name}
                     </h2>
-                    <p className="text-sm sm:text-base">
-                      Price: Rs{" "}
-                      {((item.food?.price ?? 0) * item.quantity).toFixed(2)}
+                    <p className={`text-sm sm:text-base mt-1 ${satisfy.className}`}>Rs{" "}
+                      {((item.food?.price ?? 0)).toFixed(2)}
                     </p>
                   </div>
                 </div>
-                <div className="w-40">
+                <div className="w-40 relative z-0">
                   <AddToBasketButton food={item.food} />
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="w-full lg:w-80 lg:sticky lg:top-4 h-fit bg-white p-6 border rounded order-first lg:order-last fixed bottom-0 left-0 lg:left-auto">
+          <div className="w-full lg:w-80 lg:sticky lg:top-4 h-fit pl-16 lg:pl-6 bg-white p-6 border rounded order-first lg:order-last fixed bottom-0 left-0 lg:left-auto">
             <h3 className="text-xl font-semibold">Order Summary</h3>
             <div className="mt-4 space-y-2">
-              <p className="flex justify-between">
-                <span>Items: </span>
-                <span>
-                  {groupedItems.reduce(
-                    (total, item) => total + item.quantity,
-                    0
-                  )}
-                </span>
-              </p>
-              <p className="flex justify-between">
-                <span>Subtotal: </span>
-                <span>Rs {totalPrice.toFixed(2)}</span>
-              </p>
-              <p className="flex justify-between">
-                <span>Tax (5%): </span>
-                <span>Rs {taxAmount.toFixed(2)}</span>
-              </p>
-              <p className="flex justify-between">
-                <span>Delivery Fee: </span>
-                <span>Rs {deliveryFee.toFixed(2)}</span>
-              </p>
-              <p className="flex justify-between text-2xl font-bold border-t pt-2">
-                <span>Total: </span>
-                <span>Rs {grandTotal.toFixed(2)}</span>
-              </p>
+            <p className="flex justify-between">
+              <span>Items: </span>
+              <span>
+                {groupedItems.reduce((total, item) => total + item.quantity, 0)}
+              </span>
+            </p>
+            <p className="flex justify-between">
+              <span>Subtotal: </span>
+              <span>Rs {totalPrice.toFixed(2)}</span>
+            </p>
+            <p className="flex justify-between">
+              <span>Tax (3.8%): </span>
+              <span>Rs {taxAmount.toFixed(2)}</span>
+            </p>
+            <p className="flex justify-between">
+              <span>Delivery Fee: </span>
+              <span>Rs {deliveryFee.toFixed(2)}</span>
+            </p>
+            <p className="flex justify-between text-2xl font-bold border-t pt-2">
+              <span>Total: </span>
+              <span>Rs {grandTotal.toFixed(2)}</span>
+            </p>
 
-              <div className="mt-4">
-                <input
-                  type="text"
-                  placeholder="Enter coupon code for more discount"
-                  value={couponCode}
-                  onChange={(e) => setCouponCode(e.target.value)}
-                  className="w-full p-2 border rounded-md mb-2 text-[15px]"
-                />
-                <button
-                  className={`w-full  p-2 rounded-md duration-150 transition-all ${couponCode ? "cursor-pointer" : "opacity-70 cursor-not-allowed"}`}
-                >
-                  Apply Coupon
-                </button>
-              </div>
+            <div className="mt-4">
+              <input
+                type="text"
+                placeholder="Enter coupon code for more discount"
+                value={couponCode}
+                onChange={(e) => setCouponCode(e.target.value)}
+                className="w-full p-2 border rounded-md mb-2 text-[15px]"
+              />
+              <button
+                onClick={handleCouponSubmit}
+                className={`w-full  p-2 rounded-md duration-150 transition-all ${couponCode ? "cursor-pointer" : "opacity-70 cursor-not-allowed"}`}
+              >
+                Apply Coupon
+              </button>
             </div>
+          </div>
 
             {isSignedIn ? (
               <>

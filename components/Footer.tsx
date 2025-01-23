@@ -4,9 +4,8 @@ import { IoIosCall, IoIosMail } from "react-icons/io";
 
 const Footer = () => {
   return (
-    <footer className="bg-[#8f613c] text-white py-8">
+    <footer className="bg-[#8f613c] text-white py-8 pl-16">
       <div className="max-w-7xl mx-auto px-4">
-        {/* Footer top section: Navigation links */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div className="flex flex-col space-y-4">
             <h3 className="font-bold text-lg">Quick Links</h3>
