@@ -12,13 +12,9 @@ interface Review {
 const satisfy = Satisfy({ weight: "400", subsets: ["latin"] });
 const chakra_petch = Chakra_Petch({ weight: "700", subsets: ["latin"] });
 
-interface FoodPageProps {
-  params: { slug: string };
-}
-
-async function FoodPage({ params }: FoodPageProps) {
-  const { slug } = params;
-
+async function FoodPage({ params }: { params: Promise<{ slug: string }> }) {
+  const resovledParams = await params;
+  const {slug} = resovledParams;
   const foods = await getFoodBySlug(slug);
 
   if (!foods) {
